@@ -1,13 +1,8 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var dnd;
 (function (dnd) {
     "use strict";
@@ -22,7 +17,7 @@ var dnd;
         // For the drop event. The list of items representing dragged data can be
         // read, including the data. No new data can be added.
         store.mode = "readonly";
-        var dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
+        var dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
         droppable.dispatchEvent(dragOverEvent);
         var dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
         droppable.dispatchEvent(dropEvent);
@@ -81,7 +76,7 @@ var dnd;
      *
      * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitem
      */
-    var DataTransfer = /** @class */ (function () {
+    var DataTransfer = (function () {
         function DataTransfer(store) {
             this.store = store;
             /**
@@ -242,7 +237,7 @@ var dnd;
     /**
      * @see https://w3c.github.io/FileAPI/#filelist-section
      */
-    var FileList = /** @class */ (function () {
+    var FileList = (function () {
         function FileList() {
             this.length = 0;
         }
@@ -258,7 +253,7 @@ var dnd;
      * store, consists of the following information:
      *
      */
-    var DragDataStore = /** @class */ (function () {
+    var DragDataStore = (function () {
         function DragDataStore() {
         }
         return DragDataStore;
@@ -267,7 +262,7 @@ var dnd;
      * Each DataTransfer object is associated with a DataTransferItemList object.
      * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitemlist
      */
-    var DataTransferItemList = /** @class */ (function () {
+    var DataTransferItemList = (function () {
         function DataTransferItemList(store) {
             this.store = store;
             /**
@@ -376,7 +371,7 @@ var dnd;
      *
      * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitem
      */
-    var DataTransferItem = /** @class */ (function () {
+    var DataTransferItem = (function () {
         function DataTransferItem(data, kind, typeLowerCase, store) {
             this.data = data;
             this.store = store;
@@ -431,13 +426,12 @@ var dnd;
     /**
      * @see https://heycam.github.io/webidl/#invalidstateerror
      */
-    var InvalidStateError = /** @class */ (function (_super) {
+    var InvalidStateError = (function (_super) {
         __extends(InvalidStateError, _super);
         function InvalidStateError(message) {
-            var _this = _super.call(this, message) || this;
-            _this.message = message;
-            _this.name = "InvalidStateError";
-            return _this;
+            _super.call(this, message);
+            this.message = message;
+            this.name = "InvalidStateError";
         }
         InvalidStateError.createByDefaultMessage = function () {
             return new InvalidStateError("The object is in an invalid state");
@@ -447,13 +441,12 @@ var dnd;
     /**
      * @see https://heycam.github.io/webidl/#notsupportederror
      */
-    var NotSupportedError = /** @class */ (function (_super) {
+    var NotSupportedError = (function (_super) {
         __extends(NotSupportedError, _super);
         function NotSupportedError(message) {
-            var _this = _super.call(this, message) || this;
-            _this.message = message;
-            _this.name = "NotSupportedError";
-            return _this;
+            _super.call(this, message);
+            this.message = message;
+            this.name = "NotSupportedError";
         }
         NotSupportedError.createByDefaultMessage = function () {
             return new InvalidStateError("The operation is not supported");
