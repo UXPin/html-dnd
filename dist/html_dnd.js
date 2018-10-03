@@ -17,16 +17,18 @@ var dnd;
         // For the drop event. The list of items representing dragged data can be
         // read, including the data. No new data can be added.
         store.mode = "readonly";
-        var dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
-        droppable.dispatchEvent(dragOverEvent);
-        var dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
-        droppable.dispatchEvent(dropEvent);
-        // For all other events. The formats and kinds in the drag data store list
-        // of items representing dragged data can be enumerated, but the data itself
-        // is unavailable and no new data can be added.
-        store.mode = "protected";
-        var dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
-        draggable.dispatchEvent(dragendEvent);
+        setTimeout(function () {
+            var dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+            droppable.dispatchEvent(dragOverEvent);
+            var dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+            droppable.dispatchEvent(dropEvent);
+            // For all other events. The formats and kinds in the drag data store list
+            // of items representing dragged data can be enumerated, but the data itself
+            // is unavailable and no new data can be added.
+            store.mode = "protected";
+            var dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+            draggable.dispatchEvent(dragendEvent);
+        }, 0);
     }
     dnd.simulate = simulate;
     /**

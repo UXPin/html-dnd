@@ -22,19 +22,21 @@ namespace dnd {
     // read, including the data. No new data can be added.
     store.mode = "readonly";
 
-    const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
-    droppable.dispatchEvent(dragOverEvent);
-
-    const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
-    droppable.dispatchEvent(dropEvent);
-
-    // For all other events. The formats and kinds in the drag data store list
-    // of items representing dragged data can be enumerated, but the data itself
-    // is unavailable and no new data can be added.
-    store.mode = "protected";
-
-    const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
-    draggable.dispatchEvent(dragendEvent);
+    setTimeout(function() {
+      const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+      droppable.dispatchEvent(dragOverEvent);
+  
+      const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+      droppable.dispatchEvent(dropEvent);
+  
+      // For all other events. The formats and kinds in the drag data store list
+      // of items representing dragged data can be enumerated, but the data itself
+      // is unavailable and no new data can be added.
+      store.mode = "protected";
+  
+      const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+      draggable.dispatchEvent(dragendEvent);
+    }, 0);
   }
 
   export interface MousePositions {
