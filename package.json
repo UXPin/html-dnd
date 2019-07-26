@@ -46,8 +46,7 @@
     "unit:node": "mocha test/unit/node/**/*.js",
     "unit:browser": "karma start karma.conf.js",
     "e2e:selenium-webdriver": "mocha test/e2e/selenium-webdriver/**/*.js",
-    "e2e:nightwatch": "nightwatch --config test/e2e/nightwatch/nightwatch.json",
-    "prepublish": "npm-run-all build"
+    "e2e:nightwatch": "nightwatch --config test/e2e/nightwatch/nightwatch.json"
   },
   "author": "Kuniwak",
   "license": "MIT",
