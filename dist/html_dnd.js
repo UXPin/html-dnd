@@ -6,7 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var dnd;
 (function (dnd) {
     "use strict";
-    function simulate(draggable, droppable, dndSimulateConfig) {
+    function simulate(draggable, droppable, dndSimulateConfig, middleStep) {
         var _a = calculateMousePositions(draggable, droppable, dndSimulateConfig), dragX = _a.dragX, dragY = _a.dragY, dropX = _a.dropX, dropY = _a.dropY;
         var store = new DragDataStore();
         // For the dragstart event. New data can be added to the drag data store.
@@ -18,6 +18,10 @@ var dnd;
         // read, including the data. No new data can be added.
         store.mode = "readonly";
         setTimeout(function () {
+            if (middleStep) {
+                var dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+                middleStep.dispatchEvent(dragOverEventMiddleStep);
+            }
             var dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
             droppable.dispatchEvent(dragOverEvent);
             var dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);

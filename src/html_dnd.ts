@@ -6,7 +6,7 @@ namespace dnd {
     dropOffset?: Array<number>;
   }
 
-  export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): void {
+  export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig, middleStep?:Element): void {
     const {dragX, dragY, dropX, dropY} = calculateMousePositions(draggable, droppable, dndSimulateConfig);
 
     const store = new DragDataStore();
@@ -23,6 +23,11 @@ namespace dnd {
     store.mode = "readonly";
 
     setTimeout(function() {
+      if (middleStep) {
+        const dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+        middleStep.dispatchEvent(dragOverEventMiddleStep);
+      }
+
       const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
       droppable.dispatchEvent(dragOverEvent);
   
