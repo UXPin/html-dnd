@@ -4,10 +4,11 @@ namespace dnd {
   export interface DndSimulateConfig {
     dragOffset?: Array<number>;
     dropOffset?: Array<number>;
+    middleStepOffset?: Array<number>;
   }
 
-  export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig, middleStep?:Element): void {
-    const {dragX, dragY, dropX, dropY} = calculateMousePositions(draggable, droppable, dndSimulateConfig);
+  export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig, middleStep?: Element): void {
+    const {dragX, dragY, dropX, dropY, middleStepX, middleStepY} = calculateMousePositions(draggable, droppable, dndSimulateConfig, middleStep);
 
     const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
@@ -24,7 +25,7 @@ namespace dnd {
 
     setTimeout(function() {
       if (middleStep) {
-        const dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+        const dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, middleStepX, middleStepY, false, false, false, false, 0, null);
         middleStep.dispatchEvent(dragOverEventMiddleStep);
       }
 
@@ -49,12 +50,14 @@ namespace dnd {
     dragY: number;
     dropX: number;
     dropY: number;
+    middleStepX?: number;
+    middleStepY?: number;
   }
 
   /**
    * Calculate the mouse position for drag and drop operations
    */
-  function calculateMousePositions(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): MousePositions {
+  function calculateMousePositions(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig, middleStep?: Element): MousePositions {
     const dragElementPosition = draggable.getBoundingClientRect();
     const dropElementPosition = droppable.getBoundingClientRect();
 
@@ -82,7 +85,24 @@ namespace dnd {
       dropY += (dropElementPosition.height / 2);
     }
 
-    return {dragX, dragY, dropX, dropY};
+    if (middleStep) {
+      let middleStepElementPosition = middleStep.getBoundingClientRect();
+      let middleStepX = middleStepElementPosition.left;
+      let middleStepY = middleStepElementPosition.top;
+
+      if (dndSimulateConfig && dndSimulateConfig.middleStepOffset) {
+        middleStepX += dndSimulateConfig.middleStepOffset[0];
+        middleStepY += dndSimulateConfig.middleStepOffset[1];
+      }
+      else {
+        middleStepX += (middleStepElementPosition.width / 2);
+        middleStepY += (middleStepElementPosition.height / 2);
+      }
+
+      return { dragX, dragY, dropX, dropY, middleStepX, middleStepY };
+    }
+
+    return { dragX, dragY, dropX, dropY };
   }
 
   /**
