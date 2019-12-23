@@ -7,7 +7,7 @@ var dnd;
 (function (dnd) {
     "use strict";
     function simulate(draggable, droppable, dndSimulateConfig, middleStep) {
-        var _a = calculateMousePositions(draggable, droppable, dndSimulateConfig), dragX = _a.dragX, dragY = _a.dragY, dropX = _a.dropX, dropY = _a.dropY;
+        var _a = calculateMousePositions(draggable, droppable, dndSimulateConfig, middleStep), dragX = _a.dragX, dragY = _a.dragY, dropX = _a.dropX, dropY = _a.dropY, middleStepX = _a.middleStepX, middleStepY = _a.middleStepY;
         var store = new DragDataStore();
         // For the dragstart event. New data can be added to the drag data store.
         store.mode = "readwrite";
@@ -19,26 +19,28 @@ var dnd;
         store.mode = "readonly";
         setTimeout(function () {
             if (middleStep) {
-                var dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+                var dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, middleStepX, middleStepY, false, false, false, false, 0, null);
                 middleStep.dispatchEvent(dragOverEventMiddleStep);
             }
             var dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
             droppable.dispatchEvent(dragOverEvent);
-            var dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
-            droppable.dispatchEvent(dropEvent);
-            // For all other events. The formats and kinds in the drag data store list
-            // of items representing dragged data can be enumerated, but the data itself
-            // is unavailable and no new data can be added.
-            store.mode = "protected";
-            var dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
-            draggable.dispatchEvent(dragendEvent);
+            setTimeout(function () {
+                var dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+                droppable.dispatchEvent(dropEvent);
+                // For all other events. The formats and kinds in the drag data store list
+                // of items representing dragged data can be enumerated, but the data itself
+                // is unavailable and no new data can be added.
+                store.mode = "protected";
+                var dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+                draggable.dispatchEvent(dragendEvent);
+            }, dndSimulateConfig.dropTimeout || 0);
         }, 0);
     }
     dnd.simulate = simulate;
     /**
      * Calculate the mouse position for drag and drop operations
      */
-    function calculateMousePositions(draggable, droppable, dndSimulateConfig) {
+    function calculateMousePositions(draggable, droppable, dndSimulateConfig, middleStep) {
         var dragElementPosition = draggable.getBoundingClientRect();
         var dropElementPosition = droppable.getBoundingClientRect();
         var dragX = dragElementPosition.left;
@@ -60,6 +62,20 @@ var dnd;
         else {
             dropX += (dropElementPosition.width / 2);
             dropY += (dropElementPosition.height / 2);
+        }
+        if (middleStep) {
+            var middleStepElementPosition = middleStep.getBoundingClientRect();
+            var middleStepX = middleStepElementPosition.left;
+            var middleStepY = middleStepElementPosition.top;
+            if (dndSimulateConfig && dndSimulateConfig.middleStepOffset) {
+                middleStepX += dndSimulateConfig.middleStepOffset[0];
+                middleStepY += dndSimulateConfig.middleStepOffset[1];
+            }
+            else {
+                middleStepX += (middleStepElementPosition.width / 2);
+                middleStepY += (middleStepElementPosition.height / 2);
+            }
+            return { dragX: dragX, dragY: dragY, dropX: dropX, dropY: dropY, middleStepX: middleStepX, middleStepY: middleStepY };
         }
         return { dragX: dragX, dragY: dragY, dropX: dropX, dropY: dropY };
     }
