@@ -18,6 +18,7 @@ var dnd;
         // read, including the data. No new data can be added.
         store.mode = "readonly";
         setTimeout(function () {
+            dataTransfer.dropEffect = dndSimulateConfig.dropEffect || "move";
             if (middleStep) {
                 var dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, middleStepX, middleStepY, false, false, false, false, 0, null);
                 middleStep.dispatchEvent(dragOverEventMiddleStep);

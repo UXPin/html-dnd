@@ -6,6 +6,7 @@ namespace dnd {
     dropOffset?: Array<number>;
     middleStepOffset?: Array<number>;
     dropTimeout?: number;
+    dropEffect?: DropEffect;
   }
 
   export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig, middleStep?: Element): void {
@@ -24,7 +25,9 @@ namespace dnd {
     // read, including the data. No new data can be added.
     store.mode = "readonly";
 
-    setTimeout(function() {
+    setTimeout(function(): void {
+      dataTransfer.dropEffect = dndSimulateConfig.dropEffect || "move";
+
       if (middleStep) {
         const dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, middleStepX, middleStepY, false, false, false, false, 0, null);
         middleStep.dispatchEvent(dragOverEventMiddleStep);
@@ -32,16 +35,16 @@ namespace dnd {
 
       const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
       droppable.dispatchEvent(dragOverEvent);
-  
-      setTimeout(function () {
+
+      setTimeout(function (): void {
         const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
         droppable.dispatchEvent(dropEvent);
-    
+
         // For all other events. The formats and kinds in the drag data store list
         // of items representing dragged data can be enumerated, but the data itself
         // is unavailable and no new data can be added.
         store.mode = "protected";
-    
+
         const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
         draggable.dispatchEvent(dragendEvent);
       }, dndSimulateConfig.dropTimeout || 0);
