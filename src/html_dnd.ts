@@ -6,6 +6,7 @@ namespace dnd {
     dropOffset?: Array<number>;
     middleStepOffset?: Array<number>;
     dropTimeout?: number;
+    dropEffect?: DropEffect;
   }
 
   export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig, middleStep?: Element): void {
@@ -25,6 +26,8 @@ namespace dnd {
     store.mode = "readonly";
 
     setTimeout(function(): void {
+      dataTransfer.dropEffect = dndSimulateConfig.dropEffect || "move";
+
       if (middleStep) {
         const dragOverEventMiddleStep = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, middleStepX, middleStepY, false, false, false, false, 0, null);
         middleStep.dispatchEvent(dragOverEventMiddleStep);
