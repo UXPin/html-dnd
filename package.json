@@ -9,6 +9,11 @@
     "test",
     "webdriver"
   ],
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
   "main": "lib/index.js",
   "devDependencies": {
     "babel-eslint": "^8.0.3",
@@ -55,11 +60,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kuniwak/html-dnd.git"
+    "url": "git+https://github.com/UXPin/html-dnd.git"
   },
   "bugs": {
-    "url": "https://github.com/Kuniwak/html-dnd/issues"
+    "url": "https://github.com/UXPin/html-dnd/issues"
   },
   "typings": "html-dnd.d.ts",
-  "homepage": "https://github.com/Kuniwak/html-dnd#readme"
+  "homepage": "https://github.com/UXPin/html-dnd#readme"
 }
